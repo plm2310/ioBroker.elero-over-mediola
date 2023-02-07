@@ -165,6 +165,9 @@ class EleroOverMediola extends utils.Adapter {
 	// 	}
 	// }
 
+	/**
+	 * Function statusPoll creates a Request on the Gateay to retrieve the Status for all devices
+	 */
 	async statusPoll(){
 		this.log.debug ('PollTimer Started');
 
@@ -173,10 +176,13 @@ class EleroOverMediola extends utils.Adapter {
 			this._pollTimeout = null;
 		}
 
+		// request new Status from Gateway
+
+
 		this._pollTimeout = this.setTimeout(() => {
 			this.pollTimeout = null;
 			this.statusPoll();
-		}, 60 * 1000); // Restart online check in 60 seconds
+		}, this.config.pollIntervall * 1000); // Restart pollIntervall
 	}
 
 }
