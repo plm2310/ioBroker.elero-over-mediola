@@ -8,6 +8,7 @@
 // you need to create an adapter
 const utils = require('@iobroker/adapter-core');
 
+
 // Load your modules here, e.g.:
 // const fs = require("fs");
 
@@ -21,6 +22,9 @@ class EleroOverMediola extends utils.Adapter {
 			...options,
 			name: 'elero-over-mediola',
 		});
+
+		this._pollTimeout = null;
+
 		this.on('ready', this.onReady.bind(this));
 		this.on('stateChange', this.onStateChange.bind(this));
 		// this.on('objectChange', this.onObjectChange.bind(this));
@@ -32,7 +36,6 @@ class EleroOverMediola extends utils.Adapter {
 	 * Is called when databases are connected and adapter received configuration.
 	 */
 	async onReady() {
-		// Initialize your adapter here
 
 		// Reset the connection indicator during startup
 		this.setState('info.connection', false, true);
@@ -41,6 +44,9 @@ class EleroOverMediola extends utils.Adapter {
 		// this.config:
 		this.log.info('config option1: ' + this.config.option1);
 		this.log.info('config option2: ' + this.config.option2);
+
+		//Create Poll-Timeout to request status of all devices regularly:
+		this.statusPoll();
 
 		/*
 		For every state in the system there has to be also an object of type state
@@ -95,7 +101,10 @@ class EleroOverMediola extends utils.Adapter {
 	onUnload(callback) {
 		try {
 			// Here you must clear all timeouts or intervals that may still be active
-			// clearTimeout(timeout1);
+			if (this._pollTimeout) {
+				this.clearTimeout(this._pollTimeout);
+				this._pollTimeout = null;
+			}
 			// clearTimeout(timeout2);
 			// ...
 			// clearInterval(interval1);
@@ -155,6 +164,20 @@ class EleroOverMediola extends utils.Adapter {
 	// 		}
 	// 	}
 	// }
+
+	async statusPoll(){
+		this.log.debug ('PollTimer Started');
+
+		if (this._pollTimeout) {
+			this.clearTimeout(this._pollTimeout);
+			this._pollTimeout = null;
+		}
+
+		this._pollTimeout = this.setTimeout(() => {
+			this.pollTimeout = null;
+			this.statusPoll();
+		}, 60 * 1000); // Restart online check in 60 seconds
+	}
 
 }
 
