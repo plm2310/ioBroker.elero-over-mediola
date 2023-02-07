@@ -77,8 +77,8 @@
 		]
 	},
 	"native": {
-		"option1": true,
-		"option2": "42"
+		"hostIp": "0.0.0.0",
+		"pollIntervall": 30
 	},
 	"objects": [],
 	"instanceObjects": [
