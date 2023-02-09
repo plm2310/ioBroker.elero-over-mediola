@@ -7,7 +7,9 @@
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = require('@iobroker/adapter-core');
-
+const axios = require('axios').default;
+const http  = require ('http');
+const https = require ('https');
 
 // Load your modules here, e.g.:
 // const fs = require("fs");
@@ -24,6 +26,8 @@ class EleroOverMediola extends utils.Adapter {
 		});
 
 		this._pollTimeout = null;
+		this._api = null;
+
 
 		this.on('ready', this.onReady.bind(this));
 		this.on('stateChange', this.onStateChange.bind(this));
@@ -44,6 +48,15 @@ class EleroOverMediola extends utils.Adapter {
 		// this.config:
 		this.log.info('gateway-IP: ' + this.config.hostIp);
 		this.log.info('pollIntervall: ' + this.config.pollIntervall);
+
+		//Initialize API Connection:
+		const httpAgent = new http.Agent({ keepAlive: true });
+		const httpsAgent = new https.Agent({ keepAlive: true });
+		this._api = axios.create({
+			baseURL: `http://${this.config.hostIp}`,
+			httpAgent,
+			httpsAgent,
+		});
 
 		//Create Poll-Timeout to request status of all devices regularly:
 		this.statusPoll();
@@ -105,6 +118,7 @@ class EleroOverMediola extends utils.Adapter {
 				this.clearTimeout(this._pollTimeout);
 				this._pollTimeout = null;
 			}
+
 			// clearTimeout(timeout2);
 			// ...
 			// clearInterval(interval1);
@@ -176,8 +190,18 @@ class EleroOverMediola extends utils.Adapter {
 			this._pollTimeout = null;
 		}
 
-		// request new Status from Gateway
-
+		try {
+			// request new Status from Gateway
+			if(this._api != null){
+				const res = await this._api.get('/command?XC_FNC=getStates');
+				this.log.debug (`API Call Successfull: ${res.status}`);
+				this.setState('info.connection',true,true);
+			}
+		} catch (error) {
+			// Handle errors
+			this.log.error(`Error in API-Call: ${error}`);
+			this.setState('info.connection', false, true);
+		}
 
 		this._pollTimeout = this.setTimeout(() => {
 			this.pollTimeout = null;
