@@ -194,7 +194,12 @@ class EleroOverMediola extends utils.Adapter {
 			// request new Status from Gateway
 			if(this._api != null){
 				const res = await this._api.get('/command?XC_FNC=getStates');
-				this.log.debug (`API Call Successfull: ${res.status}`);
+				this.log.debug (`API Call Status: ${res.status}`);
+				if (res.status == 200){
+					//Api Call sucessful parse result:
+					const api_res = await this.parseResponse (res.data);
+					this.log.debug(`Api_message:${api_res}`);
+				}
 				this.setState('info.connection',true,true);
 			}
 		} catch (error) {
@@ -207,6 +212,29 @@ class EleroOverMediola extends utils.Adapter {
 			this.pollTimeout = null;
 			this.statusPoll();
 		}, this.config.pollIntervall * 1000); // Restart pollIntervall
+	}
+
+	async parseResponse (response) {
+		const statusRegExp = /({[A-Z,_]*})(.*)/;
+		const [, status, message] = response.match(statusRegExp) || [];
+
+		if (status === '{XC_SUC}') {
+			if (message === '') {
+				return null;
+			}
+
+			try {
+				return JSON.parse(message);
+			} catch (e) {
+				throw new Error(`can't parse response message: "${message}"`);
+			}
+		}
+
+		if (status === '{XC_ERR}') {
+			throw new Error(message);
+		}
+
+		throw new Error(`can't handle response: "${response}"`);
 	}
 
 }
