@@ -245,8 +245,125 @@ class EleroOverMediola extends utils.Adapter {
 		throw new Error(`can't handle response: "${response}"`);
 	}
 
+	/**
+	 * Updates and creates IObroker States from a API Call return
+	 * @param {*} deviceObjects DeviceObjects returned by API
+	 */
 	async updateDeviceStates(deviceObjects){
-		this.log.debug(`update ${deviceObjects} devices`);
+		this.log.debug(`update ${deviceObjects.length} devices`);
+		deviceObjects.forEach(device => {
+			this.log.debug(`processing device type:${device.type}, adress:${device.adr}, states:${device.state}`);
+			//Create Type Folder
+			let deviceName = '';
+
+			switch (device.type) {
+				case 'ER':
+					deviceName = 'Elero';
+					break;
+				case 'EVENT':
+					deviceName = 'Gateway Events';
+					break;
+				default:
+					deviceName = `Mediola DeviceType: ${device.type}`;
+					break;
+			}
+
+			this.setObjectNotExistsAsync(`${device.type}`, {
+				type: 'folder',
+				common: {
+					name: device.type,
+					desc: deviceName
+				},
+				native: {},
+			});
+
+			//Create device for each Adress
+			this.setObjectNotExistsAsync(`${device.type}.${device.adr}`, {
+				type: 'device',
+				common: {
+					name: device.adr
+				},
+				native: {},
+			});
+
+			//Create and set states for device type
+			this.setObjectNotExistsAsync(`${device.type}.${device.adr}.type`, {
+				type: 'state',
+				common: {
+					name: {
+						en: 'Type',
+						de: 'Art',
+						ru: 'Тип',
+						pt: 'Tipo',
+						nl: 'Type',
+						fr: 'Type',
+						it: 'Tipo',
+						es: 'Tipo',
+						pl: 'Typ',
+						uk: 'Тип',
+						'zh-cn': '类型'
+					},
+					type: 'string',
+					role: 'text',
+					read: true,
+					write: false,
+				},
+				native: {},
+			});
+			this.setStateAsync(`${device.type}.${device.adr}.type`, { val: device.type , ack: true });
+
+			//Create and set states for device status
+			this.setObjectNotExistsAsync(`${device.type}.${device.adr}.adr`, {
+				type: 'state',
+				common: {
+					name: {
+						en: 'Adress',
+						de: 'Device Adresse',
+						ru: 'Адрес',
+						pt: 'Endereço',
+						nl: 'Adres',
+						fr: 'Adress',
+						it: 'Indirizzo',
+						es: 'Dirección',
+						pl: 'Address',
+						uk: 'Кошик',
+						'zh-cn': '处理'
+					},
+					type: 'string',
+					role: 'text',
+					read: true,
+					write: false,
+				},
+				native: {},
+			});
+			this.setStateAsync(`${device.type}.${device.adr}.adr`, { val: device.state , ack: true });
+
+			//Create and set states for device status
+			this.setObjectNotExistsAsync(`${device.type}.${device.adr}.status`, {
+				type: 'state',
+				common: {
+					name: {
+						en: 'Status',
+						de: 'Status',
+						ru: 'статус',
+						pt: 'status',
+						nl: 'status',
+						fr: 'état',
+						it: 'stato',
+						es: 'situación',
+						pl: 'status',
+						uk: 'статус',
+						'zh-cn': '现状'
+					},
+					type: 'string',
+					role: 'text',
+					read: true,
+					write: false,
+				},
+				native: {},
+			});
+			this.setStateAsync(`${device.type}.${device.adr}.status`, { val: device.state , ack: true });
+		});
 	}
 
 }
