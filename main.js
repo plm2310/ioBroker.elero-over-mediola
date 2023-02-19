@@ -180,7 +180,9 @@ class EleroOverMediola extends utils.Adapter {
 	// }
 
 	/**
-	 * Function statusPoll creates a Request on the Gateay to retrieve the Status for all devices
+	 * send Status Poll Message to Gateway and update all device States
+	 * Register new Timeout for next poll Intervall
+	 * Sets the connection states
 	 */
 	async statusPoll(){
 		this.log.debug ('PollTimer Started');
@@ -198,7 +200,8 @@ class EleroOverMediola extends utils.Adapter {
 				if (res.status == 200){
 					//Api Call sucessful parse result:
 					const api_res = await this.parseResponse (res.data);
-					this.log.debug(`Api_message:${api_res}`);
+					//receive array of all device and states => set states
+					this.updateDeviceStates(api_res);
 				}
 				this.setState('info.connection',true,true);
 			}
@@ -214,6 +217,11 @@ class EleroOverMediola extends utils.Adapter {
 		}, this.config.pollIntervall * 1000); // Restart pollIntervall
 	}
 
+	/**
+	 * parse API response and read OKI code and the databody of the response
+	 * @param {*} response Rest Response Message
+	 * @returns Array[Object] with requested deive objects
+	 */
 	async parseResponse (response) {
 		const statusRegExp = /({[A-Z,_]*})(.*)/;
 		const [, status, message] = response.match(statusRegExp) || [];
@@ -235,6 +243,10 @@ class EleroOverMediola extends utils.Adapter {
 		}
 
 		throw new Error(`can't handle response: "${response}"`);
+	}
+
+	async updateDeviceStates(deviceObjects){
+		this.log.debug(`update ${deviceObjects} devices`);
 	}
 
 }
