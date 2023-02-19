@@ -115,12 +115,20 @@ class EleroOverMediola extends utils.Adapter {
 	 * @param {ioBroker.State | null | undefined} state
 	 */
 	onStateChange(id, state) {
+		const idNoNamespace = this.removeNamespace(id);
 		if (state) {
 			// The state was changed
-			this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
+			this.log.debug(`state ${idNoNamespace} changed: ${state.val} (ack = ${state.ack})`);
 		} else {
 			// The state was deleted
-			this.log.info(`state ${id} deleted`);
+			this.log.debug(`state ${idNoNamespace} deleted`);
+		}
+
+		// No ack = changed by user
+		if (id && state && !state.ack) {
+			//determin Type and Button
+			//state ER.01.button.up changed: true (ack = false)';
+			this.setStateAsync(idNoNamespace, { val: null, ack: true });
 		}
 	}
 
@@ -327,7 +335,7 @@ class EleroOverMediola extends utils.Adapter {
 			});
 			this.setStateAsync(`${device.type}.${device.adr}.status`, { val: device.state , ack: true });
 
-			//Create Buttons for Elero Blind Control:
+			//Create Buttons for Elero Blind Control (UP):
 			this.setObjectNotExistsAsync(`${device.type}.${device.adr}.button.up`, {
 				type: 'state',
 				common: {
@@ -351,7 +359,7 @@ class EleroOverMediola extends utils.Adapter {
 				},
 				native: {},
 			});
-			//Create Buttons for Elero Blind Control:
+			//Create Buttons for Elero Blind Control (DOWN):
 			this.setObjectNotExistsAsync(`${device.type}.${device.adr}.button.down`, {
 				type: 'state',
 				common: {
@@ -376,7 +384,7 @@ class EleroOverMediola extends utils.Adapter {
 				native: {},
 			});
 
-			//Create Buttons for Elero Blind Control:
+			//Create Buttons for Elero Blind Control(STOP):
 			this.setObjectNotExistsAsync(`${device.type}.${device.adr}.button.stop`, {
 				type: 'state',
 				common: {
@@ -401,7 +409,42 @@ class EleroOverMediola extends utils.Adapter {
 				native: {},
 			});
 
+			//Create Buttons for Elero Blind Control(REFRESH):
+			this.setObjectNotExistsAsync(`${device.type}.${device.adr}.button.refresh`, {
+				type: 'state',
+				common: {
+					name: {
+						en: 'refresh',
+						de: 'frisch',
+						ru: 'обновить',
+						pt: 'refrescar',
+						nl: 'verfrissing',
+						fr: 'rafraîchissant',
+						it: 'rinfrescare',
+						es: 'refresco',
+						pl: 'repackage',
+						uk: 'головна',
+						'zh-cn': '页: 1'
+					},
+					type: 'boolean',
+					role: 'button',
+					read: false,
+					write: true,
+				},
+				native: {},
+			});
+
 		});
+	}
+
+	/**
+	 * Remove the Adadpter Namespace form an state_id
+	 * @param {string} id
+	 * @returns id without namespace
+	 */
+	removeNamespace(id) {
+		const re = new RegExp(this.namespace + '*\\.', 'g');
+		return id.replace(re, '');
 	}
 
 }
