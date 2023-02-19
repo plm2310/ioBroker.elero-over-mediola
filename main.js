@@ -61,50 +61,13 @@ class EleroOverMediola extends utils.Adapter {
 		//Create Poll-Timeout to request status of all devices regularly:
 		this.statusPoll();
 
-		/*
-		For every state in the system there has to be also an object of type state
-		Here a simple template for a boolean variable named "testVariable"
-		Because every adapter instance uses its own unique namespace variable names can't collide with other adapters variables
-		*/
-		await this.setObjectNotExistsAsync('testVariable', {
-			type: 'state',
-			common: {
-				name: 'testVariable',
-				type: 'boolean',
-				role: 'indicator',
-				read: true,
-				write: true,
-			},
-			native: {},
-		});
-
 		// In order to get state updates, you need to subscribe to them. The following line adds a subscription for our variable we have created above.
-		this.subscribeStates('testVariable');
+		this.subscribeStates('*.button.*');
 		// You can also add a subscription for multiple states. The following line watches all states starting with "lights."
 		// this.subscribeStates('lights.*');
 		// Or, if you really must, you can also watch all states. Don't do this if you don't need to. Otherwise this will cause a lot of unnecessary load on the system:
 		// this.subscribeStates('*');
 
-		/*
-			setState examples
-			you will notice that each setState will cause the stateChange event to fire (because of above subscribeStates cmd)
-		*/
-		// the variable testVariable is set to true as command (ack=false)
-		await this.setStateAsync('testVariable', true);
-
-		// same thing, but the value is flagged "ack"
-		// ack should be always set to true if the value is received from or acknowledged from the target system
-		await this.setStateAsync('testVariable', { val: true, ack: true });
-
-		// same thing, but the state is deleted after 30s (getState will return null afterwards)
-		await this.setStateAsync('testVariable', { val: true, ack: true, expire: 30 });
-
-		// examples for the checkPassword/checkGroup functions
-		let result = await this.checkPasswordAsync('admin', 'iobroker');
-		this.log.info('check user admin pw iobroker: ' + result);
-
-		result = await this.checkGroupAsync('admin', 'admin');
-		this.log.info('check group user admin group admin: ' + result);
 	}
 
 	/**
@@ -336,7 +299,7 @@ class EleroOverMediola extends utils.Adapter {
 				},
 				native: {},
 			});
-			this.setStateAsync(`${device.type}.${device.adr}.adr`, { val: device.state , ack: true });
+			this.setStateAsync(`${device.type}.${device.adr}.adr`, { val: device.adr , ack: true });
 
 			//Create and set states for device status
 			this.setObjectNotExistsAsync(`${device.type}.${device.adr}.status`, {
@@ -363,6 +326,81 @@ class EleroOverMediola extends utils.Adapter {
 				native: {},
 			});
 			this.setStateAsync(`${device.type}.${device.adr}.status`, { val: device.state , ack: true });
+
+			//Create Buttons for Elero Blind Control:
+			this.setObjectNotExistsAsync(`${device.type}.${device.adr}.button.up`, {
+				type: 'state',
+				common: {
+					name: {
+						en: 'open',
+						de: 'geöffnet',
+						ru: 'открыть',
+						pt: 'aberto',
+						nl: 'open',
+						fr: 'ouvert',
+						it: 'aperto',
+						es: 'abierto',
+						pl: 'otwarty',
+						uk: 'увійти',
+						'zh-cn': '开放'
+					},
+					type: 'boolean',
+					role: 'button',
+					read: false,
+					write: true,
+				},
+				native: {},
+			});
+			//Create Buttons for Elero Blind Control:
+			this.setObjectNotExistsAsync(`${device.type}.${device.adr}.button.down`, {
+				type: 'state',
+				common: {
+					name: {
+						en: 'close',
+						de: 'schliessen',
+						ru: 'озакрыть',
+						pt: 'perto',
+						nl: 'close',
+						fr: 'fenêtre de clôture',
+						it: 'finestra di chiusura',
+						es: 'ventana',
+						pl: 'okulary',
+						uk: 'закрите вікно',
+						'zh-cn': '开放'
+					},
+					type: 'boolean',
+					role: 'button',
+					read: false,
+					write: true,
+				},
+				native: {},
+			});
+
+			//Create Buttons for Elero Blind Control:
+			this.setObjectNotExistsAsync(`${device.type}.${device.adr}.button.stop`, {
+				type: 'state',
+				common: {
+					name: {
+						en: 'stop',
+						de: 'stopp',
+						ru: 'остановиться',
+						pt: 'pare',
+						nl: 'stop',
+						fr: 'stop',
+						it: 'fermati',
+						es: 'para',
+						pl: 'przystanek',
+						uk: 'увійти',
+						'zh-cn': '停止'
+					},
+					type: 'boolean',
+					role: 'button',
+					read: false,
+					write: true,
+				},
+				native: {},
+			});
+
 		});
 	}
 
