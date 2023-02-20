@@ -128,7 +128,18 @@ class EleroOverMediola extends utils.Adapter {
 		if (id && state && !state.ack) {
 			//determin Type and Button
 			//state ER.01.button.up changed: true (ack = false)';
-			this.setStateAsync(idNoNamespace, { val: null, ack: true });
+			const idArray = idNoNamespace.split('.');
+			if (idArray.length == 4){
+				switch (idArray[0]) {
+					case 'ER':
+						//"ELERO"
+						this.handleEleroCommand(idNoNamespace,idArray[1],idArray[3]);
+						break;
+					default:
+						this.log.error(`Unknown DeviveType onStateChanged ${idArray[0]}`);
+						break;
+				}
+			}
 		}
 	}
 
@@ -186,6 +197,17 @@ class EleroOverMediola extends utils.Adapter {
 			this.pollTimeout = null;
 			this.statusPoll();
 		}, this.config.pollIntervall * 1000); // Restart pollIntervall
+	}
+	/**
+	 * Handle Elero Command
+	 * @param {*} id StateID
+	 * @param {*} adr DeviceAdress
+	 * @param {*} command Command
+	 */
+	handleEleroCommand(id,adr,command){
+		this.log.debug(`Handle Event "${command}"for Elero ${id}`);
+		//SetCommandstate to false, acknowledged
+		this.setStateAsync(id, { val: false, ack: true });
 	}
 
 	/**
@@ -335,105 +357,106 @@ class EleroOverMediola extends utils.Adapter {
 			});
 			this.setStateAsync(`${device.type}.${device.adr}.status`, { val: device.state , ack: true });
 
-			//Create Buttons for Elero Blind Control (UP):
-			this.setObjectNotExistsAsync(`${device.type}.${device.adr}.button.up`, {
-				type: 'state',
-				common: {
-					name: {
-						en: 'open',
-						de: 'geöffnet',
-						ru: 'открыть',
-						pt: 'aberto',
-						nl: 'open',
-						fr: 'ouvert',
-						it: 'aperto',
-						es: 'abierto',
-						pl: 'otwarty',
-						uk: 'увійти',
-						'zh-cn': '开放'
+			if (device.type == 'ER'){
+				//Create Buttons for Elero Blind Control (UP):
+				this.setObjectNotExistsAsync(`${device.type}.${device.adr}.button.up`, {
+					type: 'state',
+					common: {
+						name: {
+							en: 'open',
+							de: 'geöffnet',
+							ru: 'открыть',
+							pt: 'aberto',
+							nl: 'open',
+							fr: 'ouvert',
+							it: 'aperto',
+							es: 'abierto',
+							pl: 'otwarty',
+							uk: 'увійти',
+							'zh-cn': '开放'
+						},
+						type: 'boolean',
+						role: 'button',
+						read: false,
+						write: true,
 					},
-					type: 'boolean',
-					role: 'button',
-					read: false,
-					write: true,
-				},
-				native: {},
-			});
-			//Create Buttons for Elero Blind Control (DOWN):
-			this.setObjectNotExistsAsync(`${device.type}.${device.adr}.button.down`, {
-				type: 'state',
-				common: {
-					name: {
-						en: 'close',
-						de: 'schliessen',
-						ru: 'озакрыть',
-						pt: 'perto',
-						nl: 'close',
-						fr: 'fenêtre de clôture',
-						it: 'finestra di chiusura',
-						es: 'ventana',
-						pl: 'okulary',
-						uk: 'закрите вікно',
-						'zh-cn': '开放'
+					native: {},
+				});
+				//Create Buttons for Elero Blind Control (DOWN):
+				this.setObjectNotExistsAsync(`${device.type}.${device.adr}.button.down`, {
+					type: 'state',
+					common: {
+						name: {
+							en: 'close',
+							de: 'schliessen',
+							ru: 'озакрыть',
+							pt: 'perto',
+							nl: 'close',
+							fr: 'fenêtre de clôture',
+							it: 'finestra di chiusura',
+							es: 'ventana',
+							pl: 'okulary',
+							uk: 'закрите вікно',
+							'zh-cn': '开放'
+						},
+						type: 'boolean',
+						role: 'button',
+						read: false,
+						write: true,
 					},
-					type: 'boolean',
-					role: 'button',
-					read: false,
-					write: true,
-				},
-				native: {},
-			});
+					native: {},
+				});
 
-			//Create Buttons for Elero Blind Control(STOP):
-			this.setObjectNotExistsAsync(`${device.type}.${device.adr}.button.stop`, {
-				type: 'state',
-				common: {
-					name: {
-						en: 'stop',
-						de: 'stopp',
-						ru: 'остановиться',
-						pt: 'pare',
-						nl: 'stop',
-						fr: 'stop',
-						it: 'fermati',
-						es: 'para',
-						pl: 'przystanek',
-						uk: 'увійти',
-						'zh-cn': '停止'
+				//Create Buttons for Elero Blind Control(STOP):
+				this.setObjectNotExistsAsync(`${device.type}.${device.adr}.button.stop`, {
+					type: 'state',
+					common: {
+						name: {
+							en: 'stop',
+							de: 'stopp',
+							ru: 'остановиться',
+							pt: 'pare',
+							nl: 'stop',
+							fr: 'stop',
+							it: 'fermati',
+							es: 'para',
+							pl: 'przystanek',
+							uk: 'увійти',
+							'zh-cn': '停止'
+						},
+						type: 'boolean',
+						role: 'button',
+						read: false,
+						write: true,
 					},
-					type: 'boolean',
-					role: 'button',
-					read: false,
-					write: true,
-				},
-				native: {},
-			});
+					native: {},
+				});
 
-			//Create Buttons for Elero Blind Control(REFRESH):
-			this.setObjectNotExistsAsync(`${device.type}.${device.adr}.button.refresh`, {
-				type: 'state',
-				common: {
-					name: {
-						en: 'refresh',
-						de: 'frisch',
-						ru: 'обновить',
-						pt: 'refrescar',
-						nl: 'verfrissing',
-						fr: 'rafraîchissant',
-						it: 'rinfrescare',
-						es: 'refresco',
-						pl: 'repackage',
-						uk: 'головна',
-						'zh-cn': '页: 1'
+				//Create Buttons for Elero Blind Control(REFRESH):
+				this.setObjectNotExistsAsync(`${device.type}.${device.adr}.button.refresh`, {
+					type: 'state',
+					common: {
+						name: {
+							en: 'refresh',
+							de: 'frisch',
+							ru: 'обновить',
+							pt: 'refrescar',
+							nl: 'verfrissing',
+							fr: 'rafraîchissant',
+							it: 'rinfrescare',
+							es: 'refresco',
+							pl: 'repackage',
+							uk: 'головна',
+							'zh-cn': '页: 1'
+						},
+						type: 'boolean',
+						role: 'button',
+						read: false,
+						write: true,
 					},
-					type: 'boolean',
-					role: 'button',
-					read: false,
-					write: true,
-				},
-				native: {},
-			});
-
+					native: {},
+				});
+			}
 		});
 	}
 
