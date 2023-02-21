@@ -236,7 +236,7 @@ class EleroOverMediola extends utils.Adapter {
 		}
 		if (commandCode != '##') {
 			//Send ApiCall
-			this.log.debug(`SendCommand: /command?XC_FNC=sendSC&type=ER&data=${kanal}${command}`);
+			this.log.debug(`SendCommand: /command?XC_FNC=sendSC&type=ER&data=${kanal}${commandCode}`);
 		}
 		//SetCommandstate to false, acknowledged
 		this.setStateAsync(id, { val: false, ack: true });
