@@ -21,6 +21,12 @@
 			"sm": 6,
 			"md": 4,
 			"newLine": true
+		},
+		"refreshER":{
+			"type": "checkbox",
+			"label": "Sync Elero with Gateway before Poll",
+			"newLine": true
 		}
+
 	}
 }

@@ -10,7 +10,7 @@ const utils = require('@iobroker/adapter-core');
 const axios = require('axios').default;
 const http  = require ('http');
 const https = require ('https');
-const { ConcurrencyManager } = require('axios-concurrency').default;
+const { ConcurrencyManager } = require('axios-concurrency');
 
 // Load your modules here, e.g.:
 // const fs = require("fs");
@@ -180,7 +180,9 @@ class EleroOverMediola extends utils.Adapter {
 		try {
 			// request new Status from Gateway
 			if(this._api != null){
-				await this._api.get('/command?XC_FNC=RefreshSC');
+				if (this.config.refreshER) {
+					await this._api.get('/command?XC_FNC=RefreshER');
+				}
 				const res = await this._api.get('/command?XC_FNC=getStates');
 				this.log.debug (`API Call Status: ${res.status}`);
 				if (res.status == 200){

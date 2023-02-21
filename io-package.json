@@ -78,7 +78,8 @@
 	},
 	"native": {
 		"hostIp": "0.0.0.0",
-		"pollIntervall": 30
+		"pollIntervall": 30,
+		"refreshER": true
 	},
 	"objects": [],
 	"instanceObjects": [

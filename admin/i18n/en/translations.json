@@ -1,5 +1,6 @@
 {
 	"elero-over-mediola adapter settings": "Adapter settings for elero-over-mediola",
 	"Gateway Ip": "Gateway Ip",
-	"Poll-Intervall":"Poll-Intervall"
+	"Poll-Intervall":"Poll-Intervall",
+	"Sync Elero with Gateway before Poll":"Sync Elero with Gateway before Poll"
 }
