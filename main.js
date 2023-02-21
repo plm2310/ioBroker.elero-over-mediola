@@ -12,6 +12,7 @@ const http  = require ('http');
 const https = require ('https');
 const { ConcurrencyManager } = require('axios-concurrency');
 
+
 // Load your modules here, e.g.:
 // const fs = require("fs");
 
@@ -190,6 +191,8 @@ class EleroOverMediola extends utils.Adapter {
 					const api_res = await this.parseResponse (res.data);
 					//receive array of all device and states => set states
 					this.updateDeviceStates(api_res);
+				}else{
+					this.log.warn(`unexpected API Returncode getStates: ${res.status} ${res.statusText}`);
 				}
 				this.setState('info.connection',true,true);
 			}
@@ -210,8 +213,31 @@ class EleroOverMediola extends utils.Adapter {
 	 * @param {*} adr DeviceAdress
 	 * @param {*} command Command
 	 */
-	handleEleroCommand(id,adr,command){
+	async handleEleroCommand(id,adr,command){
 		this.log.debug(`Handle Event "${command}"for Elero ${id}`);
+		//Get Channnel from Statuscode
+		const Elerostatus = (await this.getStateAsync(`ER.${adr}.status`))?.val;
+		const kanal = Elerostatus?.toString().substring(0,2);
+		//Set CommandCode for Action
+		let commandCode = '##';
+		switch (command) {
+			case 'up':
+				commandCode = '08';
+				break;
+			case 'down':
+				commandCode = '09';
+				break;
+			case 'stop':
+				commandCode = '02';
+				break;
+			default:
+				this.log.warn (`cannot determin command code: ${id}`);
+				break;
+		}
+		if (commandCode != '##') {
+			//Send ApiCall
+			this.log.debug(`SendCommand: /command?XC_FNC=sendSC&type=ER&data=${kanal}${command}`);
+		}
 		//SetCommandstate to false, acknowledged
 		this.setStateAsync(id, { val: false, ack: true });
 	}
