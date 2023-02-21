@@ -10,6 +10,7 @@ const utils = require('@iobroker/adapter-core');
 const axios = require('axios').default;
 const http  = require ('http');
 const https = require ('https');
+const { ConcurrencyManager } = require('axios-concurrency').default;
 
 // Load your modules here, e.g.:
 // const fs = require("fs");
@@ -27,6 +28,7 @@ class EleroOverMediola extends utils.Adapter {
 
 		this._pollTimeout = null;
 		this._api = null;
+		this._apiManager = null;
 
 
 		this.on('ready', this.onReady.bind(this));
@@ -57,6 +59,7 @@ class EleroOverMediola extends utils.Adapter {
 			httpAgent,
 			httpsAgent,
 		});
+		this._apiManager = ConcurrencyManager(this._api, 1); //Max Paralell request in API
 
 		//Create Poll-Timeout to request status of all devices regularly:
 		this.statusPoll();
@@ -177,6 +180,7 @@ class EleroOverMediola extends utils.Adapter {
 		try {
 			// request new Status from Gateway
 			if(this._api != null){
+				await this._api.get('/command?XC_FNC=RefreshSC');
 				const res = await this._api.get('/command?XC_FNC=getStates');
 				this.log.debug (`API Call Status: ${res.status}`);
 				if (res.status == 200){
