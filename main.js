@@ -185,7 +185,7 @@ class EleroOverMediola extends utils.Adapter {
 					await this._api.get('/command?XC_FNC=RefreshER');
 				}
 				const res = await this._api.get('/command?XC_FNC=getStates');
-				this.log.debug (`API Call Status: ${res.status}`);
+				this.log.debug (`API GetStates Call Status: ${res.status}`);
 				if (res.status == 200){
 					//Api Call sucessful parse result:
 					const api_res = await this.parseResponse (res.data);
@@ -215,17 +215,14 @@ class EleroOverMediola extends utils.Adapter {
 	 */
 	async handleEleroCommand(id,adr,command){
 		this.log.debug(`Handle Event "${command}"for Elero ${id}`);
-		//Get Channnel from Statuscode
-		const Elerostatus = (await this.getStateAsync(`ER.${adr}.status`))?.val;
-		const kanal = Elerostatus?.toString().substring(0,2);
 		//Set CommandCode for Action
 		let commandCode = '##';
 		switch (command) {
 			case 'up':
-				commandCode = '08';
+				commandCode = '01';
 				break;
 			case 'down':
-				commandCode = '09';
+				commandCode = '00';
 				break;
 			case 'stop':
 				commandCode = '02';
@@ -234,9 +231,20 @@ class EleroOverMediola extends utils.Adapter {
 				this.log.warn (`cannot determin command code: ${id}`);
 				break;
 		}
-		if (commandCode != '##') {
+		if (commandCode != '##' && this._api != null) {
 			//Send ApiCall
-			this.log.debug(`SendCommand: /command?XC_FNC=sendSC&type=ER&data=${kanal}${commandCode}`);
+			const api_command = `/command?XC_FNC=sendSC&type=ER&data=${adr}${commandCode}`;
+			this.log.debug(`SendCommand: ${api_command}`);
+			/*const res = await this._api.get(api_command);
+			this.log.debug (`API SendCommand Call Status: ${res.status}`);
+			if (res.status == 200){
+				//Api Call sucessful parse result:
+				const api_res = await this.parseResponse (res.data);
+				//receive array of all device and states => set states
+				this.updateDeviceStates(api_res);
+			}else{
+				this.log.warn(`unexpected API Returncode getStates: ${res.status} ${res.statusText}`);
+			}*/
 		}
 		//SetCommandstate to false, acknowledged
 		this.setStateAsync(id, { val: false, ack: true });
