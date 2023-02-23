@@ -184,16 +184,7 @@ class EleroOverMediola extends utils.Adapter {
 				if (this.config.refreshER) {
 					await this._api.get('/command?XC_FNC=RefreshER');
 				}
-				const res = await this._api.get('/command?XC_FNC=getStates');
-				this.log.debug (`API GetStates Call Status: ${res.status}`);
-				if (res.status == 200){
-					//Api Call sucessful parse result:
-					const api_res = await this.parseResponse (res.data);
-					//receive array of all device and states => set states
-					this.updateDeviceStates(api_res);
-				}else{
-					this.log.warn(`unexpected API Returncode getStates: ${res.status} ${res.statusText}`);
-				}
+				await this.updateStates();
 				this.setState('info.connection',true,true);
 			}
 		} catch (error) {
@@ -207,6 +198,25 @@ class EleroOverMediola extends utils.Adapter {
 			this.statusPoll();
 		}, this.config.pollIntervall * 1000); // Restart pollIntervall
 	}
+
+	/**
+	 * set GetStates to API and update ioBrokerstates
+	 */
+	async updateStates(){
+		if(this._api != null){
+			const res = await this._api.get('/command?XC_FNC=getStates');
+			this.log.debug (`API GetStates Call Status: ${res.status}`);
+			if (res.status == 200){
+				//Api Call sucessful parse result:
+				const api_res = await this.parseResponse (res.data);
+				//receive array of all device and states => set states
+				this.updateDeviceStates(api_res);
+			}else{
+				this.log.warn(`unexpected API Returncode getStates: ${res.status} ${res.statusText}`);
+			}
+		}
+	}
+
 	/**
 	 * Handle Elero Command
 	 * @param {*} id StateID
@@ -235,16 +245,18 @@ class EleroOverMediola extends utils.Adapter {
 			//Send ApiCall
 			const api_command = `/command?XC_FNC=sendSC&type=ER&data=${adr}${commandCode}`;
 			this.log.debug(`SendCommand: ${api_command}`);
-			/*const res = await this._api.get(api_command);
+			const res = await this._api.get(api_command);
 			this.log.debug (`API SendCommand Call Status: ${res.status}`);
 			if (res.status == 200){
+				//UpdateStatus for this device:
+
 				//Api Call sucessful parse result:
-				const api_res = await this.parseResponse (res.data);
+				//const api_res = await this.parseResponse (res.data);
 				//receive array of all device and states => set states
-				this.updateDeviceStates(api_res);
+				//this.updateDeviceStates(api_res);
 			}else{
 				this.log.warn(`unexpected API Returncode getStates: ${res.status} ${res.statusText}`);
-			}*/
+			}
 		}
 		//SetCommandstate to false, acknowledged
 		this.setStateAsync(id, { val: false, ack: true });
