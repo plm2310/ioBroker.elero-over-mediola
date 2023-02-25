@@ -410,6 +410,26 @@ class EleroOverMediola extends utils.Adapter {
 			this.setStateAsync(`${device.type}.${device.adr}.status`, { val: device.state , ack: true });
 
 			if (device.type == 'ER'){
+				this.setObjectNotExistsAsync(`${device.type}.${device.adr}.button`, {
+					type: 'channel',
+					common: {
+						name: {
+							en: 'control',
+							de: 'Steuerung',
+							ru: 'контроль',
+							pt: 'controles',
+							nl: 'control',
+							fr: 'commandes',
+							it: 'controlli',
+							es: 'controles',
+							pl: 'kontrola',
+							uk: 'контроль',
+							'zh-cn': '控制'
+						},
+						role:  'blind'
+					},
+					native: {},
+				});
 				//Create Buttons for Elero Blind Control (UP):
 				this.setObjectNotExistsAsync(`${device.type}.${device.adr}.button.up`, {
 					type: 'state',
@@ -508,6 +528,148 @@ class EleroOverMediola extends utils.Adapter {
 					},
 					native: {},
 				});
+
+				if (this.config.createHomekitStates) {
+					//Create HomekistStates for Device
+					//Channel Homekist Control:
+					this.setObjectNotExistsAsync(`${device.type}.${device.adr}.homekit`, {
+						type: 'channel',
+						common: {
+							name: {
+								en: 'homekit controls',
+								de: 'homekit control',
+								ru: 'homekit управления',
+								pt: 'controles do homekit',
+								nl: 'hemeltje controleert',
+								fr: 'commandes homekit',
+								it: 'homekit controlli',
+								es: 'controles de casetas',
+								pl: 'kontrola homeki',
+								uk: 'управління гомілкою',
+								'zh-cn': '住宅管制'
+							},
+							role:  'blind'
+						},
+						native: {},
+					});
+
+					/* The corresponding value is an integer percentage. A value of 0 indicates a door or window should be fully closed, or that awnings or shades should permit the least possible light. A value of 100 indicates the opposite. */
+					// TARGET Position
+					this.setObjectNotExistsAsync(`${device.type}.${device.adr}.homekit.target_position`, {
+						type: 'state',
+						common: {
+							name: {
+								en: 'target position',
+								de: 'zielposition',
+								ru: 'целевая позиция',
+								pt: 'posição do alvo',
+								nl: 'doelwit',
+								fr: 'position cible',
+								it: 'posizione target',
+								es: 'de destino',
+								pl: 'pozycja docelowa',
+								uk: 'цільова позиція',
+								'zh-cn': '目标'
+							},
+							type: 'number',
+							min: 0,
+							max: 100,
+							unit:  '%',
+							step:100,
+							desc: {
+								en: '0 = closed, 100 = open',
+								de: '0 = geschlossen, 100 = offen',
+								ru: '0 = закрыто, 100 = открыто',
+								pt: '0 = fechado, 100 = aberto',
+								nl: 'quality over quantity (qoq) releases vertaling:',
+								fr: '0 = fermé, 100 = ouvert',
+								it: '0 = chiuso, 100 = aperto',
+								es: '0 = cerrado, 100 = abierto',
+								pl: '0 = zamknięte, 100 = otwarte',
+								uk: '0 = закритий, 100 = відкрити',
+								'zh-cn': '页:1'
+							},
+							role:  'level.blind',
+							read: true,
+							write: true,
+						},
+						native: {},
+					});
+					//CURRENT_POSITION
+					/* The corresponding value is an integer percentage. A value of 0 indicates a door or window should be fully closed, or that awnings or shades should permit the least possible light. A value of 100 indicates the opposite. */
+					this.setObjectNotExistsAsync(`${device.type}.${device.adr}.homekit.current_position`, {
+						type: 'state',
+						common: {
+							name: {
+								en: 'current position',
+								de: 'aktuelle position',
+								ru: 'текущее положение',
+								pt: 'posição atual',
+								nl: 'huidige positie',
+								fr: 'position actuelle',
+								it: 'posizione corrente',
+								es: 'posición actual',
+								pl: 'pozycja',
+								uk: 'поточна позиція',
+								'zh-cn': '现任职务'
+							},
+							type: 'number',
+							min: 0,
+							max: 100,
+							unit:  '%',
+							desc: {
+								en: '0 = closed, 100 = open',
+								de: '0 = geschlossen, 100 = offen',
+								ru: '0 = закрыто, 100 = открыто',
+								pt: '0 = fechado, 100 = aberto',
+								nl: 'quality over quantity (qoq) releases vertaling:',
+								fr: '0 = fermé, 100 = ouvert',
+								it: '0 = chiuso, 100 = aperto',
+								es: '0 = cerrado, 100 = abierto',
+								pl: '0 = zamknięte, 100 = otwarte',
+								uk: '0 = закритий, 100 = відкрити',
+								'zh-cn': '页:1'
+							},
+							role:  'level.blind',
+							read: true,
+							write: false,
+						},
+						native: {},
+					});
+					//POSITION STATE
+					//CURRENT_POSITION
+					/* closing = 0, opening = 1 stopped = 2*/
+					this.setObjectNotExistsAsync(`${device.type}.${device.adr}.homekit.position_state`, {
+						type: 'state',
+						common: {
+							name: {
+								en: 'moving state',
+								de: 'bewegungszustand',
+								ru: 'движение государства',
+								pt: 'estado em movimento',
+								nl: 'bewegende staat',
+								fr: 'état mobile',
+								it: 'stato in movimento',
+								es: 'estado en movimiento',
+								pl: 'stan transportu',
+								uk: 'рухомий стан',
+								'zh-cn': '州'
+							},
+							type: 'number',
+							min: 0,
+							max: 2,
+							states: {
+								0: 'closing',
+								1: 'opening',
+								2:'stopped'
+							},
+							role:  'value.window',
+							read: true,
+							write: false,
+						},
+						native: {},
+					});
+				}
 			}
 		});
 	}
