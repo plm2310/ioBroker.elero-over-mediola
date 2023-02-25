@@ -10,7 +10,7 @@ const utils = require('@iobroker/adapter-core');
 const axios = require('axios').default;
 const http  = require ('http');
 const https = require ('https');
-const { ConcurrencyManager } = require('axios-concurrency');
+const { MediolaApiManager } = require('./mediola/mediolaapimanager.js').MediolaApiManager;
 
 
 // Load your modules here, e.g.:
@@ -60,7 +60,7 @@ class EleroOverMediola extends utils.Adapter {
 			httpAgent,
 			httpsAgent,
 		});
-		this._apiManager = ConcurrencyManager(this._api, 1); //Max Paralell request in API
+		this._apiManager = MediolaApiManager(this._api, 1); //Max Paralell request in API
 
 		//Create Poll-Timeout to request status of all devices regularly:
 		this.statusPoll();
@@ -204,7 +204,7 @@ class EleroOverMediola extends utils.Adapter {
 	 */
 	async updateStates(){
 		if(this._api != null){
-			const res = await this._api.get('/command?XC_FNC=getStates');
+			const res = await this._api.get('/command?XC_FNC=getStates', );
 			this.log.debug (`API GetStates Call Status: ${res.status}`);
 			if (res.status == 200){
 				//Api Call sucessful parse result:
@@ -249,7 +249,7 @@ class EleroOverMediola extends utils.Adapter {
 			this.log.debug (`API SendCommand Call Status: ${res.status}`);
 			if (res.status == 200){
 				//UpdateStatus for this device:
-
+				this.updateStates();
 				//Api Call sucessful parse result:
 				//const api_res = await this.parseResponse (res.data);
 				//receive array of all device and states => set states
