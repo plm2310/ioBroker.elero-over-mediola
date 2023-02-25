@@ -22,9 +22,20 @@
 			"md": 4,
 			"newLine": true
 		},
+		"eleroHeader":{
+			"type":"header",
+			"text": "Elero Settings",
+			"size": 2,
+			"newLine": true
+		},
 		"refreshER":{
 			"type": "checkbox",
 			"label": "Sync Elero with Gateway before Poll",
+			"newLine": true
+		},
+		"createHomekitStates":{
+			"type": "checkbox",
+			"label": "add Homekit States for Elero Blinds",
 			"newLine": true
 		}
 
