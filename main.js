@@ -67,6 +67,7 @@ class EleroOverMediola extends utils.Adapter {
 
 		// In order to get state updates, you need to subscribe to them. The following line adds a subscription for our variable we have created above.
 		this.subscribeStates('*.button.*');
+		this.subscribeStates('*.homekit.target_position');
 		// You can also add a subscription for multiple states. The following line watches all states starting with "lights."
 		// this.subscribeStates('lights.*');
 		// Or, if you really must, you can also watch all states. Don't do this if you don't need to. Otherwise this will cause a lot of unnecessary load on the system:
@@ -137,7 +138,7 @@ class EleroOverMediola extends utils.Adapter {
 				switch (idArray[0]) {
 					case 'ER':
 						//"ELERO"
-						this.handleEleroCommand(idNoNamespace,idArray[1],idArray[3]);
+						this.handleEleroCommand(idNoNamespace,idArray[1],idArray[3], state);
 						break;
 					default:
 						this.log.error(`Unknown DeviveType onStateChanged ${idArray[0]}`);
@@ -223,10 +224,11 @@ class EleroOverMediola extends utils.Adapter {
 	 * @param {*} adr DeviceAdress
 	 * @param {*} command Command
 	 */
-	async handleEleroCommand(id,adr,command){
+	async handleEleroCommand(id,adr,command, state){
 		this.log.debug(`Handle Event "${command}"for Elero ${id}`);
 		//Set CommandCode for Action
 		let commandCode = '##';
+		let state_action = 'reset';
 		switch (command) {
 			case 'up':
 				commandCode = '01';
@@ -237,8 +239,21 @@ class EleroOverMediola extends utils.Adapter {
 			case 'stop':
 				commandCode = '02';
 				break;
+			case 'target_position':
+				//percentage of windows opened:
+				if (state.val == 100){
+					commandCode = '01';
+					state_action = 'ack';
+				}
+				else if(state.val == 0){
+					commandCode = '00';
+					state_action = 'ack';
+				}else{
+					this.log.warn (`invalid target position value${state.val}`);
+				}
+				break;
 			default:
-				this.log.warn (`cannot determin command code: ${id}`);
+				this.log.warn (`cannot determine command code: ${id}`);
 				break;
 		}
 		if (commandCode != '##' && this._api != null) {
@@ -258,8 +273,13 @@ class EleroOverMediola extends utils.Adapter {
 				this.log.warn(`unexpected API Returncode getStates: ${res.status} ${res.statusText}`);
 			}
 		}
-		//SetCommandstate to false, acknowledged
-		this.setStateAsync(id, { val: false, ack: true });
+		if (state_action == 'reset'){
+			//SetCommandstate to false, acknowledged
+			this.setStateAsync(id, { val: false, ack: true });
+		}else if( state_action == 'ack'){
+			this.setStateAsync(id, { val: state.val, ack: true });
+		}
+
 	}
 
 	/**
@@ -669,6 +689,39 @@ class EleroOverMediola extends utils.Adapter {
 						},
 						native: {},
 					});
+
+					let position = null;
+					let state = null;
+					switch (device.state) {
+						case '9001' || '9005':
+							position = 100; // opened
+							state = 2; //stopped
+							break;
+						case '9002' || '900F':
+							position = 0; // closed
+							state = 2; //stopped
+							break;
+						case '800B' || '900B':
+							position = 50; //"middle"
+							state = 0; //closing
+							break;
+						case '800A' || '900A':
+							position = 50; //"middle"
+							state = 1; //opening
+							break;
+						case '900D':
+							position = 50; //"middle"
+							state = 2; //stopped
+							break;
+						default:
+							break;
+					}
+					if (position != null){
+						this.setStateAsync(`${device.type}.${device.adr}.homekit.current_position`, { val: position , ack: true });
+					}
+					if (state != null){
+						this.setStateAsync(`${device.type}.${device.adr}.homekit.position_state`, { val: state , ack: true });
+					}
 				}
 			}
 		});
