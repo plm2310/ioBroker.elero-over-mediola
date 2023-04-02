@@ -1,6 +1,6 @@
 {
   "name": "iobroker.elero-over-mediola",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Control Elero Blinds over Mediola Gateway",
   "author": {
     "name": "Michael Ploch",
