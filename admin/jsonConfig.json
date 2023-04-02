@@ -33,6 +33,17 @@
 			"label": "Sync Elero with Gateway before Poll",
 			"newLine": true
 		},
+		"extraPoll":{
+			"type": "checkbox",
+			"label": "add extra poll after command",
+			"newLine": true
+		},
+		"extraPollSec":{
+			"type": "number",
+			"label": "Waiting Seconds to send extra poll",
+			"min": 1,
+			"max": 30
+		},
 		"createHomekitStates":{
 			"type": "checkbox",
 			"label": "add Homekit States for Elero Blinds",

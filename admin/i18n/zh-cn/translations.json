@@ -6,5 +6,7 @@
     "Poll-Intervall": "轮询间隔",
     "Sync Elero with Gateway before Poll": "轮询前将 Elero 与网关同步",
     "Elero Settings": "Elero 设置",
-    "add Homekit States for Elero Blinds": "为 Elero 百叶窗添加 Homekit 状态"
+    "add Homekit States for Elero Blinds": "为 Elero 百叶窗添加 Homekit 状态",
+    "add extra poll after command": "在命令后添加额外的轮询",
+    "Waiting Seconds to send extra poll": "等待秒数以发送额外的轮询"
 }

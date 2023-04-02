@@ -6,5 +6,7 @@
     "Poll-Intervall": "Intervalo de sondeo",
     "Sync Elero with Gateway before Poll": "Sincroniza Elero con Gateway antes de la encuesta",
     "Elero Settings": "Configuración de Elero",
-    "add Homekit States for Elero Blinds": "agregue los estados de Homekit para las persianas Elero"
+    "add Homekit States for Elero Blinds": "agregue los estados de Homekit para las persianas Elero",
+    "add extra poll after command": "agregar encuesta adicional después del comando",
+    "Waiting Seconds to send extra poll": "Segundos de espera para enviar una encuesta adicional"
 }

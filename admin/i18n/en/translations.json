@@ -4,5 +4,7 @@
 	"Poll-Intervall":"Poll-Intervall",
 	"Sync Elero with Gateway before Poll":"Sync Elero with Gateway before Poll",
 	"Elero Settings":"Elero Settings",
-	"add Homekit States for Elero Blinds":"add Homekit States for Elero Blinds"
+	"add Homekit States for Elero Blinds":"add Homekit States for Elero Blinds",
+	"add extra poll after command":"add extra poll after command",
+	"Waiting Seconds to send extra poll":"Waiting Seconds to send extra poll"
 }

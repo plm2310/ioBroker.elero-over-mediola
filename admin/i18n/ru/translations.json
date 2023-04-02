@@ -6,5 +6,7 @@
     "Poll-Intervall": "Интервал опроса",
     "Sync Elero with Gateway before Poll": "Синхронизируйте Elero со шлюзом перед опросом",
     "Elero Settings": "Настройки Элеро",
-    "add Homekit States for Elero Blinds": "добавить состояния Homekit для жалюзи Elero"
+    "add Homekit States for Elero Blinds": "добавить состояния Homekit для жалюзи Elero",
+    "add extra poll after command": "добавить дополнительный опрос после команды",
+    "Waiting Seconds to send extra poll": "Секунды ожидания отправки дополнительного опроса"
 }

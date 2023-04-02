@@ -6,5 +6,7 @@
     "Poll-Intervall": "Poll-Intervall",
     "Sync Elero with Gateway before Poll": "Synchronisieren alle Geräte vor Polling abfrage",
     "Elero Settings": "Elero-Einstellungen",
-    "add Homekit States for Elero Blinds": "Homekit States für Elero-Jalousien erstellen"
+    "add Homekit States for Elero Blinds": "Homekit States für Elero-Jalousien erstellen",
+    "add extra poll after command": "zusätzliche Statusabfrage nach einem Button Command",
+    "Waiting Seconds to send extra poll": "Wartezeit (Sekunden), um eine zusätzliche Umfrage zu senden"
 }
