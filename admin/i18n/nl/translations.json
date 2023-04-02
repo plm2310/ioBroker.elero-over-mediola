@@ -1,5 +1,10 @@
 {
-	"elero-over-mediola adapter settings": "Adapterinstellingen voor elero-over-mediola",
-	"option1": "Optie 1",
-	"option2": "Optie 2"
+    "elero-over-mediola adapter settings": "Adapterinstellingen voor elero-over-mediola",
+    "option1": "Optie 1",
+    "option2": "Optie 2",
+    "Gateway Ip": "Gateway IP",
+    "Poll-Intervall": "Poll-interval",
+    "Sync Elero with Gateway before Poll": "Synchroniseer Elero met Gateway vóór Poll",
+    "Elero Settings": "Elero-instellingen",
+    "add Homekit States for Elero Blinds": "voeg Homekit States toe voor Elero Blinds"
 }

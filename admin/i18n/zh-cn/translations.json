@@ -1,5 +1,10 @@
 {
-	"elero-over-mediola adapter settings": "elero-over-mediola的适配器设置",
-	"option1": "选项1",
-	"option2": "选项2"
+    "elero-over-mediola adapter settings": "elero-over-mediola的适配器设置",
+    "option1": "选项1",
+    "option2": "选项2",
+    "Gateway Ip": "网关IP",
+    "Poll-Intervall": "轮询间隔",
+    "Sync Elero with Gateway before Poll": "轮询前将 Elero 与网关同步",
+    "Elero Settings": "Elero 设置",
+    "add Homekit States for Elero Blinds": "为 Elero 百叶窗添加 Homekit 状态"
 }

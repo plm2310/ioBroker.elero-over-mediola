@@ -1,0 +1,8 @@
+{
+    "elero-over-mediola adapter settings": "Налаштування адаптера для elero-over-mediola",
+    "Gateway Ip": "Шлюз IP",
+    "Poll-Intervall": "Опитування-Інтервал",
+    "Sync Elero with Gateway before Poll": "Синхронізувати Elero зі шлюзом перед опитуванням",
+    "Elero Settings": "Налаштування Elero",
+    "add Homekit States for Elero Blinds": "додати штати Homekit для жалюзі Elero"
+}

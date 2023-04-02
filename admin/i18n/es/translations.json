@@ -1,5 +1,10 @@
 {
-	"elero-over-mediola adapter settings": "Ajustes del adaptador para elero-over-mediola",
-	"option1": "Opción 1",
-	"option2": "opcion 2"
+    "elero-over-mediola adapter settings": "Ajustes del adaptador para elero-over-mediola",
+    "option1": "Opción 1",
+    "option2": "opcion 2",
+    "Gateway Ip": "IP de acceso",
+    "Poll-Intervall": "Intervalo de sondeo",
+    "Sync Elero with Gateway before Poll": "Sincroniza Elero con Gateway antes de la encuesta",
+    "Elero Settings": "Configuración de Elero",
+    "add Homekit States for Elero Blinds": "agregue los estados de Homekit para las persianas Elero"
 }
