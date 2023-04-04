@@ -31,6 +31,8 @@ class EleroOverMediola extends utils.Adapter {
 		this._api = null;
 		this._apiManager = null;
 
+		this._extraPollTimeout = null;
+		this._extraPollAttemps = 0;
 
 		this.on('ready', this.onReady.bind(this));
 		this.on('stateChange', this.onStateChange.bind(this));
@@ -195,7 +197,7 @@ class EleroOverMediola extends utils.Adapter {
 		}
 
 		this._pollTimeout = this.setTimeout(() => {
-			this.pollTimeout = null;
+			this._pollTimeout = null;
 			this.statusPoll();
 		}, this.config.pollIntervall * 1000); // Restart pollIntervall
 	}
@@ -265,10 +267,12 @@ class EleroOverMediola extends utils.Adapter {
 			if (res.status == 200){
 				//UpdateStatus for this device:
 				this.updateStates();
-				//Api Call sucessful parse result:
-				//const api_res = await this.parseResponse (res.data);
-				//receive array of all device and states => set states
-				//this.updateDeviceStates(api_res);
+				//check if extra Poll is configured
+				if (this.config.extraPoll && this.config.extraPollTimes > 0){
+					this._extraPollAttemps = this.config.extraPollTimes;
+					this.extraPoll ();
+				}
+
 			}else{
 				this.log.warn(`unexpected API Returncode getStates: ${res.status} ${res.statusText}`);
 			}
@@ -308,6 +312,37 @@ class EleroOverMediola extends utils.Adapter {
 		}
 
 		throw new Error(`can't handle response: "${response}"`);
+	}
+	/**
+	 * Timout for extra Polls after a command is send to get more up-to-date states.
+	 * reduces number of attemps at the beginning, poll status and restarts if no of attemps is > 0.
+	 */
+	async extraPoll(){
+		this.log.debug ('ExtraPollTimer Started');
+		this._extraPollAttemps -= 1;
+		if (this._extraPollTimeout) {
+			this.clearTimeout(this._extraPollTimeout);
+			this._extraPollTimeout = null;
+		}
+		this.statusPoll();
+		// try {
+		// 	// request new Status from Gateway
+		// 	if(this._api != null){
+		// 		if (this.config.refreshER) {
+		// 			await this._api.get('/command?XC_FNC=RefreshER');
+		// 		}
+		// 		await this.updateStates();
+		// 	}
+		// } catch (error) {
+		// 	// Handle errors
+		// 	this.log.error(`Error in API-Call: ${error}`);
+		// }
+		if (this._extraPollAttemps > 0){
+			this._extraPollTimeout = this.setTimeout(() => {
+				this._extraPollTimeout = null;
+				this.extraPoll();
+			}, this.config.extraPollSec * 1000); // Restart extraPollIntervall
+		}
 	}
 
 	/**
