@@ -324,19 +324,19 @@ class EleroOverMediola extends utils.Adapter {
 			this.clearTimeout(this._extraPollTimeout);
 			this._extraPollTimeout = null;
 		}
-		this.statusPoll();
-		// try {
-		// 	// request new Status from Gateway
-		// 	if(this._api != null){
-		// 		if (this.config.refreshER) {
-		// 			await this._api.get('/command?XC_FNC=RefreshER');
-		// 		}
-		// 		await this.updateStates();
-		// 	}
-		// } catch (error) {
-		// 	// Handle errors
-		// 	this.log.error(`Error in API-Call: ${error}`);
-		// }
+		//this.statusPoll();
+		try {
+			// request new Status from Gateway
+			if(this._api != null){
+				if (this.config.refreshER) {
+					await this._api.get('/command?XC_FNC=RefreshER');
+				}
+				await this.updateStates();
+			}
+		} catch (error) {
+			// Handle errors
+			this.log.error(`Error in API-Call: ${error}`);
+		}
 		if (this._extraPollAttemps > 0){
 			this._extraPollTimeout = this.setTimeout(() => {
 				this._extraPollTimeout = null;
