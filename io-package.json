@@ -1,128 +1,141 @@
 {
-    "common": {
-        "name": "elero-over-mediola",
-        "version": "1.0.0",
-        "news": {
-            "1.0.0": {
-                "en": "initial release",
-                "de": "erstausstrahlung",
-                "ru": "начальный выпуск",
-                "pt": "lançamento inicial",
-                "nl": "niet",
-                "fr": "initial release",
-                "it": "rilascio iniziale",
-                "es": "liberación inicial",
-                "pl": "pierwsze wydanie",
-                "uk": "початковий реліз",
-                "zh-cn": "初步释放"
-            },
-            "0.0.1": {
-                "en": "initial release",
-                "de": "Erstveröffentlichung",
-                "ru": "Начальная версия",
-                "pt": "lançamento inicial",
-                "nl": "Eerste uitgave",
-                "fr": "Première version",
-                "it": "Versione iniziale",
-                "es": "Versión inicial",
-                "pl": "Pierwsze wydanie",
-                "zh-cn": "首次出版",
-                "uk": "початковий випуск"
-            }
-        },
-        "title": "Elero Blinds with Mediola Gateway",
-        "titleLang": {
-            "en": "Elero Blinds with Mediola Gateway",
-            "de": "Elero Jalousien mit Mediola Gateway",
-            "ru": "Жалюзи Elero с шлюзом Mediola",
-            "pt": "Elero Blinds com Mediola Gateway",
-            "nl": "Elero Jaloezieën met Mediola Gateway",
-            "fr": "Stores Elero avec passerelle Mediola",
-            "it": "Elero Oscuranti con Mediola Gateway",
-            "es": "Persianas Elero con Pasarela Mediola",
-            "pl": "Rolety Elero z bramką Mediola",
-            "zh-cn": "Elero 百叶窗与 Mediola Gateway",
-            "uk": "Жалюзі Elero з шлюзом Mediola"
-        },
-        "desc": {
-            "en": "Control Elero Blinds over Mediola Gateway",
-            "de": "Steuern Sie Elero-Jalousien über Mediola Gateway",
-            "ru": "Управление жалюзи Elero через Mediola Gateway",
-            "pt": "Controle Elero Blinds sobre Mediola Gateway",
-            "nl": "Bedien Elero Blinds via Mediola Gateway",
-            "fr": "Contrôlez les stores Elero sur la passerelle Mediola",
-            "it": "Controlla Elero Blinds su Mediola Gateway",
-            "es": "Controle las persianas de Elero sobre Mediola Gateway",
-            "pl": "Steruj żaluzjami Elero przez bramkę Mediola",
-            "zh-cn": "通过 Mediola Gateway 控制 Elero Blinds",
-            "uk": "Керуйте Elero Blinds через Mediola Gateway"
-        },
-        "authors": [
-            "Michael Ploch <miploch@gmail.com>"
-        ],
-        "keywords": [
-            "elero",
-            "blinds",
-            "mediola gateway"
-        ],
-        "license": "MIT",
-        "platform": "Javascript/Node.js",
-        "main": "main.js",
-        "icon": "elero-over-mediola.png",
-        "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/plm2310/ioBroker.elero-over-mediola/main/admin/elero-over-mediola.png",
-        "readme": "https://github.com/plm2310/ioBroker.elero-over-mediola/blob/main/README.md",
-        "loglevel": "info",
-        "mode": "daemon",
-        "type": "hardware",
-        "compact": true,
-        "connectionType": "local",
-        "dataSource": "poll",
-        "adminUI": {
-            "config": "json"
-        },
-        "dependencies": [
-            {
-                "js-controller": ">=3.3.22"
-            }
-        ],
-        "globalDependencies": [
-            {
-                "admin": ">=5.1.13"
-            }
-        ]
+  "common": {
+    "name": "elero-over-mediola",
+    "version": "1.1.0",
+    "news": {
+      "1.1.0": {
+        "en": "added extra poll after command",
+        "de": "zusätzliche umfrage nach befehl hinzugefügt",
+        "ru": "добавлен дополнительный опрос после команды",
+        "pt": "adicionado extra poll após o comando",
+        "nl": "voegde extra peiling toe na het bevel",
+        "fr": "plus de sondage après commande",
+        "it": "aggiunto ulteriore sondaggio dopo il comando",
+        "es": "encuesta adicional después del comando",
+        "pl": "dodatkowe sondy po dodaniu dodatkowych sondy po dodaniu dodatkowych dodatkowych sondy po dodaniu dodatkowych dodatkowych wniosków",
+        "uk": "додано додатковий опитування після команди",
+        "zh-cn": "指挥后增加的投票"
+      },
+      "1.0.0": {
+        "en": "initial release",
+        "de": "erstausstrahlung",
+        "ru": "начальный выпуск",
+        "pt": "lançamento inicial",
+        "nl": "niet",
+        "fr": "initial release",
+        "it": "rilascio iniziale",
+        "es": "liberación inicial",
+        "pl": "pierwsze wydanie",
+        "uk": "початковий реліз",
+        "zh-cn": "初步释放"
+      },
+      "0.0.1": {
+        "en": "initial release",
+        "de": "Erstveröffentlichung",
+        "ru": "Начальная версия",
+        "pt": "lançamento inicial",
+        "nl": "Eerste uitgave",
+        "fr": "Première version",
+        "it": "Versione iniziale",
+        "es": "Versión inicial",
+        "pl": "Pierwsze wydanie",
+        "zh-cn": "首次出版",
+        "uk": "початковий випуск"
+      }
     },
-    "native": {
-        "hostIp": "0.0.0.0",
-        "pollIntervall": 30,
-        "refreshER": true,
-        "createHomekitStates": true,
-        "extraPoll": true,
-        "extraPollSec": 10,
-        "extraPollTimes": 1
+    "title": "Elero Blinds with Mediola Gateway",
+    "titleLang": {
+      "en": "Elero Blinds with Mediola Gateway",
+      "de": "Elero Jalousien mit Mediola Gateway",
+      "ru": "Жалюзи Elero с шлюзом Mediola",
+      "pt": "Elero Blinds com Mediola Gateway",
+      "nl": "Elero Jaloezieën met Mediola Gateway",
+      "fr": "Stores Elero avec passerelle Mediola",
+      "it": "Elero Oscuranti con Mediola Gateway",
+      "es": "Persianas Elero con Pasarela Mediola",
+      "pl": "Rolety Elero z bramką Mediola",
+      "zh-cn": "Elero 百叶窗与 Mediola Gateway",
+      "uk": "Жалюзі Elero з шлюзом Mediola"
     },
-    "objects": [],
-    "instanceObjects": [
-        {
-            "_id": "info",
-            "type": "channel",
-            "common": {
-                "name": "Information"
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.connection",
-            "type": "state",
-            "common": {
-                "role": "indicator.connected",
-                "name": "Device or service connected",
-                "type": "boolean",
-                "read": true,
-                "write": false,
-                "def": false
-            },
-            "native": {}
-        }
+    "desc": {
+      "en": "Control Elero Blinds over Mediola Gateway",
+      "de": "Steuern Sie Elero-Jalousien über Mediola Gateway",
+      "ru": "Управление жалюзи Elero через Mediola Gateway",
+      "pt": "Controle Elero Blinds sobre Mediola Gateway",
+      "nl": "Bedien Elero Blinds via Mediola Gateway",
+      "fr": "Contrôlez les stores Elero sur la passerelle Mediola",
+      "it": "Controlla Elero Blinds su Mediola Gateway",
+      "es": "Controle las persianas de Elero sobre Mediola Gateway",
+      "pl": "Steruj żaluzjami Elero przez bramkę Mediola",
+      "zh-cn": "通过 Mediola Gateway 控制 Elero Blinds",
+      "uk": "Керуйте Elero Blinds через Mediola Gateway"
+    },
+    "authors": [
+      "Michael Ploch <miploch@gmail.com>"
+    ],
+    "keywords": [
+      "elero",
+      "blinds",
+      "mediola gateway"
+    ],
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "main": "main.js",
+    "icon": "elero-over-mediola.png",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/plm2310/ioBroker.elero-over-mediola/main/admin/elero-over-mediola.png",
+    "readme": "https://github.com/plm2310/ioBroker.elero-over-mediola/blob/main/README.md",
+    "loglevel": "info",
+    "mode": "daemon",
+    "type": "hardware",
+    "compact": true,
+    "connectionType": "local",
+    "dataSource": "poll",
+    "adminUI": {
+      "config": "json"
+    },
+    "dependencies": [
+      {
+        "js-controller": ">=3.3.22"
+      }
+    ],
+    "globalDependencies": [
+      {
+        "admin": ">=5.1.13"
+      }
     ]
+  },
+  "native": {
+    "hostIp": "0.0.0.0",
+    "pollIntervall": 30,
+    "refreshER": true,
+    "createHomekitStates": true,
+    "extraPoll": true,
+    "extraPollSec": 10,
+    "extraPollTimes": 1
+  },
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": {
+        "name": "Information"
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "role": "indicator.connected",
+        "name": "Device or service connected",
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    }
+  ]
 }
