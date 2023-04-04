@@ -98,7 +98,8 @@
         "refreshER": true,
         "createHomekitStates": true,
         "extraPoll": true,
-        "extraPollSec": 10
+        "extraPollSec": 10,
+        "extraPollTimes": 1
     },
     "objects": [],
     "instanceObjects": [

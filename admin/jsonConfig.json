@@ -38,6 +38,12 @@
 			"label": "add extra poll after command",
 			"newLine": true
 		},
+		"extraPollTimes":{
+			"type": "number",
+			"label": "No. Attemps",
+			"min": 1,
+			"max": 9
+		},
 		"extraPollSec":{
 			"type": "number",
 			"label": "Waiting Seconds to send extra poll",

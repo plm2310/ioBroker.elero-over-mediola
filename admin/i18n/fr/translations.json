@@ -8,5 +8,6 @@
     "Elero Settings": "Paramètres Elero",
     "add Homekit States for Elero Blinds": "ajouter des états Homekit pour les stores Elero",
     "add extra poll after command": "ajouter un sondage supplémentaire après la commande",
-    "Waiting Seconds to send extra poll": "Attendre quelques secondes pour envoyer un sondage supplémentaire"
+    "Waiting Seconds to send extra poll": "Attendre quelques secondes pour envoyer un sondage supplémentaire",
+    "No. Attemps": "Nombre de tentatives"
 }

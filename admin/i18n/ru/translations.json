@@ -8,5 +8,6 @@
     "Elero Settings": "Настройки Элеро",
     "add Homekit States for Elero Blinds": "добавить состояния Homekit для жалюзи Elero",
     "add extra poll after command": "добавить дополнительный опрос после команды",
-    "Waiting Seconds to send extra poll": "Секунды ожидания отправки дополнительного опроса"
+    "Waiting Seconds to send extra poll": "Секунды ожидания отправки дополнительного опроса",
+    "No. Attemps": "№ попыток"
 }
