@@ -728,19 +728,23 @@ class EleroOverMediola extends utils.Adapter {
 					let position = null;
 					let state = null;
 					switch (device.state) {
-						case '9001' || '9005':
+						case '9001':
+						case '9005':
 							position = 100; // opened
 							state = 2; //stopped
 							break;
-						case '9002' || '900F':
+						case '9002':
+						case '900F':
 							position = 0; // closed
 							state = 2; //stopped
 							break;
-						case '800B' || '900B':
+						case '800B':
+						case '900B':
 							position = 50; //"middle"
 							state = 0; //closing
 							break;
-						case '800A' || '900A':
+						case '800A':
+						case '900A':
 							position = 50; //"middle"
 							state = 1; //opening
 							break;
